@@ -33,8 +33,9 @@ def getMatrixConsole():
                 print(" Please enter valid numbers.")
     return matrix
 
-
 # Counts the number of leading zero(s) for each row into a list, returns that list
+
+
 def countRowLeadingZero(mat):
     leadingZeroCntRow = [0 for x in range(len(mat))]
     for i in range(len(mat)):
@@ -44,8 +45,9 @@ def countRowLeadingZero(mat):
             leadingZeroCntRow[i] += 1
     return leadingZeroCntRow
 
-
 # Performs guass elimination on a matrix, returns that matrix
+
+
 def guassElimination(extMat):
     # Counts and stores the number of leading zero(s) for each row
     # The number of leading zero(s) corresponds with the first non-zero index
@@ -72,25 +74,22 @@ def guassElimination(extMat):
             if divisor != 0:
                 extMat[i][j] /= divisor
         # Updates for row(s) underneath, also update counting array
-        for j in range(i + 1, len(extMat)):
+        for j in range(i+1, len(extMat)):
             # Only update for row(s) with equal number of leading zero(s) as pivot
-            if leadingZeroCntRow[j] == leadingZeroCntRow[i] and leadingZeroCntRow[
-                j
-            ] < len(extMat[0]):
+            if leadingZeroCntRow[j] == leadingZeroCntRow[i] and leadingZeroCntRow[j] < len(extMat[0]):
                 leadingZeroCurCnt = leadingZeroCntRow[j]
-                divisor = (
-                    extMat[j][leadingZeroCntRow[j]] / extMat[i][leadingZeroCntRow[i]]
-                )
+                divisor = extMat[j][leadingZeroCntRow[j]] / extMat[i][leadingZeroCntRow[i]]
                 for k in range(leadingZeroCntRow[j], len(extMat[0])):
-                    extMat[j][k] -= extMat[i][k] * divisor
+                    extMat[j][k] -= (extMat[i][k]*divisor)
                     # Store and update counting array later if leading zero's count changes
                     if extMat[j][k] == 0 and leadingZeroCurCnt == k:
                         leadingZeroCurCnt += 1
                 leadingZeroCntRow[j] = leadingZeroCurCnt
     return extMat
 
-
 # Solves linear equations from an extended matrix (A|B) with Ax=B, returns resulting list
+
+
 def backSubstitution(extMat):
     guassElimination(extMat)
     # Counts and stores the number of leading zero(s) for each row
@@ -100,33 +99,33 @@ def backSubstitution(extMat):
     coeffMatRank = 0
     extMatRank = 0
     for i in range(len(extMat)):
-        if leadingZeroCntRow[i] < len(extMat[0]) - 1:
+        if leadingZeroCntRow[i] < len(extMat[0])-1:
             coeffMatRank += 1
         if leadingZeroCntRow[i] != len(extMat[0]):
             extMatRank += 1
     # Determines outcome based on ranks
-    result = [nan for x in range(len(extMat[0]) - 1)]
+    result = [nan for x in range(len(extMat[0])-1)]
     # No solution (example: 0,0,0|a!=0)
     if coeffMatRank < extMatRank:
         return result
     # Solution exists
     if coeffMatRank == extMatRank <= len(extMat[0]):
-        for i in range(len(extMat) - 1, -1, -1):
+        for i in range(len(extMat)-1, -1, -1):
             if leadingZeroCntRow[i] >= len(extMat[0]):
                 continue
             calCache = 0
-            for j in range(len(extMat[0]) - 2, leadingZeroCntRow[i] - 1, -1):
+            for j in range(len(extMat[0])-2, leadingZeroCntRow[i]-1, -1):
                 # Already solved for variable at that column
                 if result[j] != nan:
-                    calCache += extMat[i][j] * result[j]
+                    calCache += (extMat[i][j]*result[j])
                     continue
                 # Solves for unknown variable(s) at column(s) not leading '1'
                 if j != leadingZeroCntRow[i]:
-                    result[j] = symbols("t" + str(j + 1))
-                    calCache += extMat[i][j] * result[j]
+                    result[j] = symbols('t'+str(j+1))
+                    calCache += (extMat[i][j]*result[j])
                 # Solves for unknown variable(s) at column(s) with leading '1'
                 else:
-                    result[j] = extMat[i][len(extMat[0]) - 1] - calCache
+                    result[j] = extMat[i][len(extMat[0])-1] - calCache
         return result
 
 
