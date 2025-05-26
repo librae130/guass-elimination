@@ -1,4 +1,4 @@
-from sympy import symbols, nan
+from sympy import symbols, nan, Rational
 
 
 def getMatrixConsole():
@@ -13,7 +13,7 @@ def getMatrixConsole():
         except ValueError:
             print("Please enter valid integers.")
     print(f"\nEnter the matrix elements ({rows}x{cols}):")
-    print("You can enter decimals, or integers.")
+    print("You can enter decimals, fractions (a/b) or integers.")
     print("Enter elements row by row, separated by spaces.\n")
     matrix = []
     for i in range(rows):
@@ -26,7 +26,7 @@ def getMatrixConsole():
                     continue
                 row = []
                 for e in rowIn:
-                    row.append(float(e))
+                    row.append(Rational(e))
                 matrix.append(row)
                 break
             except (ValueError, ZeroDivisionError):
@@ -92,13 +92,13 @@ def backSubstitution(extMat):
     result = [nan for x in range(len(extMat[0])-1)]
     # No solution (example: 0,0,0|a!=0)
     for i in range(len(leadingZeroCntRow)):
-        if leadingZeroCntRow[i] == len(mat[0]) - 1:
+        if leadingZeroCntRow[i] == len(extMat[0]) - 1:
             return result
     # Solution exists
     for i in range(len(extMat)-1, -1, -1):
         if leadingZeroCntRow[i] >= len(extMat[0]):
             continue
-        calCache = 0
+        calCache = Rational(0)
         for j in range(len(extMat[0])-2, leadingZeroCntRow[i]-1, -1):
             # Already solved for variable at that column
             if result[j] != nan:
@@ -111,7 +111,7 @@ def backSubstitution(extMat):
             # Solves for unknown variable(s) at column(s) with leading '1'
             else:
                 result[j] = extMat[i][len(extMat[0])-1] - calCache
-        return result
+    return result
 
 
 matIn = getMatrixConsole()
