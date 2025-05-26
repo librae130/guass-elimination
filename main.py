@@ -95,37 +95,28 @@ def backSubstitution(extMat):
     # Counts and stores the number of leading zero(s) for each row
     # The number of leading zero(s) corresponds with the first non-zero index
     leadingZeroCntRow = countRowLeadingZero(extMat)
-    # Determines the ranks of coefficient matrix and extended matrix
-    coeffMatRank = 0
-    extMatRank = 0
-    for i in range(len(extMat)):
-        if leadingZeroCntRow[i] < len(extMat[0])-1:
-            coeffMatRank += 1
-        if leadingZeroCntRow[i] != len(extMat[0]):
-            extMatRank += 1
-    # Determines outcome based on ranks
     result = [nan for x in range(len(extMat[0])-1)]
     # No solution (example: 0,0,0|a!=0)
-    if coeffMatRank < extMatRank:
-        return result
+    for i in range(len(leadingZeroCntRow)):
+        if leadingZeroCntRow[i] == len(mat[0]) - 1:
+            return result
     # Solution exists
-    if coeffMatRank == extMatRank <= len(extMat[0]):
-        for i in range(len(extMat)-1, -1, -1):
-            if leadingZeroCntRow[i] >= len(extMat[0]):
+    for i in range(len(extMat)-1, -1, -1):
+        if leadingZeroCntRow[i] >= len(extMat[0]):
+            continue
+        calCache = 0
+        for j in range(len(extMat[0])-2, leadingZeroCntRow[i]-1, -1):
+            # Already solved for variable at that column
+            if result[j] != nan:
+                calCache += (extMat[i][j]*result[j])
                 continue
-            calCache = 0
-            for j in range(len(extMat[0])-2, leadingZeroCntRow[i]-1, -1):
-                # Already solved for variable at that column
-                if result[j] != nan:
-                    calCache += (extMat[i][j]*result[j])
-                    continue
-                # Solves for unknown variable(s) at column(s) not leading '1'
-                if j != leadingZeroCntRow[i]:
-                    result[j] = symbols('t'+str(j+1))
-                    calCache += (extMat[i][j]*result[j])
-                # Solves for unknown variable(s) at column(s) with leading '1'
-                else:
-                    result[j] = extMat[i][len(extMat[0])-1] - calCache
+            # Solves for unknown variable(s) at column(s) not leading '1'
+            if j != leadingZeroCntRow[i]:
+                result[j] = symbols('t'+str(j+1))
+                calCache += (extMat[i][j]*result[j])
+            # Solves for unknown variable(s) at column(s) with leading '1'
+            else:
+                result[j] = extMat[i][len(extMat[0])-1] - calCache
         return result
 
 
