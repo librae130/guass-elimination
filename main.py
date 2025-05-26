@@ -34,8 +34,6 @@ def getMatrixConsole():
     return matrix
 
 # Counts the number of leading zero(s) for each row into a list, returns that list
-
-
 def countRowLeadingZero(mat):
     leadingZeroCntRow = [0 for x in range(len(mat))]
     for i in range(len(mat)):
@@ -46,8 +44,6 @@ def countRowLeadingZero(mat):
     return leadingZeroCntRow
 
 # Performs guass elimination on a matrix, returns that matrix
-
-
 def guassElimination(extMat):
     # Counts and stores the number of leading zero(s) for each row
     # The number of leading zero(s) corresponds with the first non-zero index
@@ -88,8 +84,6 @@ def guassElimination(extMat):
     return extMat
 
 # Solves linear equations from an extended matrix (A|B) with Ax=B, returns resulting list
-
-
 def backSubstitution(extMat):
     guassElimination(extMat)
     # Counts and stores the number of leading zero(s) for each row
