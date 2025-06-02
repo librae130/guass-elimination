@@ -69,6 +69,7 @@ def guassElimination(extMat):
         for j in range(leadingZeroCntRow[i], len(extMat[0])):
             if divisor != 0:
                 extMat[i][j] /= divisor
+        print(extMat)
         # Updates for row(s) underneath, also update counting array
         for j in range(i+1, len(extMat)):
             # Only update for row(s) with equal number of leading zero(s) as pivot
@@ -89,7 +90,9 @@ def backSubstitution(extMat):
     # Counts and stores the number of leading zero(s) for each row
     # The number of leading zero(s) corresponds with the first non-zero index
     leadingZeroCntRow = countRowLeadingZero(extMat)
-    result = [nan for x in range(len(extMat[0])-1)]
+    result = []
+    for i in range(len(extMat)-1):
+        result.append(nan)
     # No solution (example: 0,0,0|a!=0)
     for i in range(len(leadingZeroCntRow)):
         if leadingZeroCntRow[i] == len(extMat[0]) - 1:
@@ -116,4 +119,5 @@ def backSubstitution(extMat):
 
 matIn = getMatrixConsole()
 print(matIn)
+
 print(backSubstitution(matIn))
