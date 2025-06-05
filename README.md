@@ -1,2 +1,2 @@
-Simple guass elimination for solving linear equations, no pivoting.
+Simple guass elimination for solving linear equations.
 sympy is a must.
