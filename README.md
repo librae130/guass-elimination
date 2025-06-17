@@ -1,2 +1,2 @@
-Simple guass elimination for solving linear equations.
-sympy is a must.
+Some linear algebra algorithms for a univeristy course.
+Require sympy and numpy libraries.
